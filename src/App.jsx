@@ -1,46 +1,52 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react';
 import './App.css'
 import Header from './Header'
 import ToDo from './ListToDo';
+const url = "https://sum-server.100xdevs.com/todos";
 
 
 function App() {
   // const [randomNum, setRandomNum] = useState("");
-  // const [toDoList, setToDoList] = useState([
-  //   {
-  //     id: 1,
-  //     title: "Bug off",
-  //     description: "All of the lights"
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Jug of war",
-  //     description: "My beautiful dark twisted fantasy"
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "run away",
-  //     description: "Home sweet home"
-  //   },
-  // ])
+  const [toDoList, setToDoList] = useState([]);
+  async function toGetData() {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data)
+
+    setToDoList(data.todos);
+  }
+  useEffect(() => {
+    // setInterval(() => {
+      toGetData();
+    // }, 5000)
+  }, [])
+
+  function addToDo() {
+    setToDoList([...toDoList, {
+      id: toDoList.length + 1,
+      title: `Task ${toDoList.length + 1}`,
+      description: "New Hunt"
+    }])
+  }
   // function handleClick() {
   //   let num = Math.floor(Math.random() * 100) + 1;
   //   setRandomNum(num);
   // }
-  // function addToDo() {
-  //   setToDoList([...toDoList, {
-  //     id: toDoList.length + 1,
-  //     title: `Task ${toDoList.length + 1}`,
-  //     description: "New Hunt"
-  //   }])
-  // }
   return (
     <div>
       {/* <HeaderWithButton></HeaderWithButton> */}
-      {/* <button onClick={addToDo}>Add Cohort!</button>
-      <ToDo toDoList={toDoList} /> */}
-      <CardWrapper innerComponent={TextComponent}></CardWrapper>
+      <button onClick={addToDo}>Add Cohort!</button>
+      <ToDo toDoList={toDoList} />
+      {/* <CardWrapper innerComponent={TextComponent}></CardWrapper> */}
+
+      {/* <CardWrapper>
+        <h1>Random Number Generator</h1>
+      </CardWrapper>
+      <h1>------------------------------</h1>
+      <CardWrapper>
+        <TextComponent />
+      </CardWrapper> */}
 
       {/* <Header title={`Max Marshal ${randomNum}`} />
       <Header title="React Deep Dive 2.0" />
@@ -59,17 +65,11 @@ function TextComponent() {
   </div>
 }
 
-function CardWrapper({ innerComponent: TextComponent }) {
+function CardWrapper({ children }) {
   return (
     <>
-      <div style={{ border: "4px double black", fontSize: "16px", padding: "10px" }}>
-        <TextComponent />
-      </div>
-      <div style={{ border: "4px double black", fontSize: "16px", padding: "10px" }}>
-        <TextComponent />
-      </div>
-      <div style={{ border: "4px double black", fontSize: "16px", padding: "10px" }}>
-        <TextComponent />
+      <div style={{ border: "4px double black", fontSize: "16px", padding: "10px", width: "300px", height: "200px" }}>
+        {children}
       </div>
     </>
   )
