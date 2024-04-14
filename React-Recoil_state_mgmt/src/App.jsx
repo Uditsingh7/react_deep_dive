@@ -29,7 +29,7 @@ function Message() {
   const isEven = useRecoilValue(evenSelector);
   return (
     <>
-      {isEven ? <div>Count is even</div> : <div>Count is Odd</div>}
+      {isEven ? <div>Count is even</div> : <div>Count is</div>}
     </>
   )
 }
